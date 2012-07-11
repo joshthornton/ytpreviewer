@@ -84,7 +84,7 @@
 		var count = Math.ceil( this[ qualityString ].thumbnailCount / ( this[ qualityString ].gridWidth * this[ qualityString ].gridHeight ) );
 		
 		for ( var i = 0; i < count; ++i )
-			images.push( this.url.replace( compilePattern, "http" + window.location.protocol == 'https:'? "":"s"  + "$2" + this[ qualityString ].lValue + "$3M" + i + "$4?sigh=" + this[ qualityString ].sigh ) ); 
+			images.push( this.url.replace( compilePattern, "$1" + ( window.location.protocol == 'https:' ? "s" : "" )  + "$2" + this[ qualityString ].lValue + "$3M" + i + "$4?sigh=" + this[ qualityString ].sigh ) ); 
 		
 		return images;
 	}
