@@ -114,7 +114,7 @@
 		list.css(
 		{
 			"width" : scale * s.imageWidth,
-			"height" : scale * s.imageHeight * qualitySpec.thumbnailCount
+			"height" : scale * s.imageHeight * s.thumbnailCount
 		});
 
 		for ( var i = 0; i < s.thumbnailCount; ++i )
@@ -122,12 +122,12 @@
 			var frame = $( "<li></li>" );
 			frame.css(
 			{
-				"background-image" : "url( '" + images[ Math.floor( i / ( s.gridWidth * qualitySpec.gridHeight ) ) ] +"' )",
+				"background-image" : "url( '" + images[ Math.floor( i / ( s.gridWidth * s.gridHeight ) ) ] +"' )",
 				"width" : scale * s.imageWidth,
 				"height" : scale * s.imageHeight,
-				"background-position-x" : ( i % ( s.gridWidth * qualitySpec.gridHeight ) ) % qualitySpec.gridWidth * scale * qualitySpec.imageWidth,
-				"background-position-y" : Math.floor( ( i % ( s.gridWidth * qualitySpec.gridHeight ) ) / qualitySpec.gridHeight )  * scale * qualitySpec.imageHeight,
-				"background-size" : ( scale * s.imageWidth * qualitySpec.gridWidth ) + "px " + ( scale * qualitySpec.imageHeight * qualitySpec.gridHeight ) + "px"
+				"background-position-x" : ( i % ( s.gridWidth * s.gridHeight ) ) % s.gridWidth * scale * s.imageWidth,
+				"background-position-y" : Math.floor( ( i % ( s.gridWidth * s.gridHeight ) ) / s.gridHeight )  * scale * s.imageHeight,
+				"background-size" : ( scale * s.imageWidth * s.gridWidth ) + "px " + ( scale * s.imageHeight * s.gridHeight ) + "px"
 			});
 			
 			$( list ).append( frame );
