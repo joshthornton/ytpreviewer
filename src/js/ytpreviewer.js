@@ -75,7 +75,7 @@
 						if ( !spec ) return;
 
 						// Cache spec
-						cache.set( id, JSON.stringify( spec.data ) );
+						cache.set( id, JSON.stringify( spec ) );
 
 						callback( spec );
 					} catch ( e ) {
@@ -94,7 +94,7 @@
 		var quality = cache.get( "quality" ) || defaultQuality;
 		var scale = cache.get( "scale" ) || defaultScale;
 		var images = spec.getImageSet( quality );
-		var s = spec.getSpecForQuality( quality );
+		var s = spec[ quality ]; // Save lots of characters!
 		
 		// Add event listeners
 		$( elem ).mouseout( function () { $( ".ytpreviewer" ).remove(); } );

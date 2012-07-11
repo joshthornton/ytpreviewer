@@ -14,27 +14,24 @@
 		// Handle empty spec string
 		if ( typeof( specObject ) != "string" ) 
 			return;
-
 		
 		// Cached object
 		try {
-			this.data = JSON.parse( specObject );
-			return;
+			$.extend( this, JSON.parse( specObject ) );
+			return this;
 		} catch ( e ) {}
-
+		
 		// Match sections of spec string
 		var matches = specPattern.exec( specObject );
-	
-		this.data = {};
 
 		// Get URL
 		if ( matches[ 2 ] )
-			this.data.url = matches[ 2 ];
-	
+			this.url = matches[ 2 ];
+
 		// Get low quality
 		if ( matches[ 4 ] ) {
 			var low = qualityPattern.exec( matches[ 4 ] );
-			this.data.low = {
+			this.low = {
 				imageWidth : low[ 1 ],
 				imageHeight : low[ 2 ],
 				thumbnailCount : low[ 3 ],
@@ -44,11 +41,11 @@
 				lValue : 1
 			};
 		}
-	
+
 		// Get medium quality
 		if ( matches[ 5 ] ) {
 			var medium = qualityPattern.exec( matches[ 5 ] );
-			this.data.medium = {
+			this.medium = {
 				imageWidth : medium[ 1 ],
 				imageHeight : medium[ 2 ],
 				thumbnailCount : medium[ 3 ],
@@ -57,12 +54,14 @@
 				sigh : medium[ 6 ],
 				lValue : 2
 			};
+		} else {
+			this.medium = this.low;
 		}
-	
+
 		// Get high quality
 		if ( matches[ 6 ] ) {
 			var high = qualityPattern.exec( matches[ 6 ] );
-			this.data.high = {
+			this.high = {
 				imageWidth : high[ 1 ],
 				imageHeight : high[ 2 ],
 				thumbnailCount : high[ 3 ],
@@ -71,6 +70,8 @@
 				sigh : high[ 6 ],
 				lValue : 3
 			};
+		} else {
+			this.high = this.medium
 		}
 
 		return this;
@@ -80,26 +81,13 @@
 	Spec.prototype.getImageSet = function ( qualityString )
 	{
 		var images = [ ];
-		var s = this.getSpecForQuality( qualityString );
-		var count = Math.ceil( s.thumbnailCount / ( s.gridWidth * s.gridHeight ) );
+		var count = Math.ceil( this[ qualityString ].thumbnailCount / ( this[ qualityString ].gridWidth * this[ qualityString ].gridHeight ) );
 		
 		for ( var i = 0; i < count; ++i )
-			images.push( this.data.url.replace( compilePattern, "$1" + s.lValue + "$2M" + i + "$3?sigh=" + s.sigh ) ); 
+			images.push( this.url.replace( compilePattern, "$1" + this[ qualityString ].lValue + "$2M" + i + "$3?sigh=" + this[ qualityString ].sigh ) ); 
 		
 		return images;
 	}
-	
-	
-	Spec.prototype.getSpecForQuality = function( qualityString )
-	{
-		if ( !qualityString || qualityString == "high" )
-			return this.data.high || this.data.medium || this.data.low || {};
-		if ( qualityString == "medium" )
-			return this.data.medium || this.data.low || {};
-		if ( qualityString == "low" )
-			return this.data.low || {};
-	}
-
-	
 
 } )( window );
+
