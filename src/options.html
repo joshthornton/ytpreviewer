@@ -1,0 +1,27 @@
+<html>
+	<head>
+		<title>YouTube Previewer Options</title>
+		<script type="text/javascript" src="jquery.min.js"></script>
+		<script type="text/javascript" src="cache.js"></script>
+		<script type="text/javascript" src="options.js"></script>
+	</head>
+	<body> 
+		Thumbnail Quality:
+		<select id="quality">
+			<option value="low">low (fastest)</option>
+			<option value="medium">Medium</option>
+			<option value="high">high (slowest)</option>
+		</select>
+		<br />
+		Pre-Fetch Image Specs (faster response on hover but may waste bandwidth fetching unnecessary specs):
+		<input type="checkbox" id="preload" />
+		<br />
+		Pixel-Double:
+		<input type="checkbox" id="scale" />
+		<br />
+		<input type="submit" value="Save"  id="save"/>
+		<br />
+		<input type="submit" value="Clear Cache"  id="clear"/>
+		<p id="status"></p>
+	</body>
+</html>
