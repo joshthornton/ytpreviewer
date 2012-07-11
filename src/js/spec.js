@@ -5,7 +5,7 @@
 	// Regex
 	var specPattern = /((https?\:\/\/i[0-9]+\.ytimg\.com\/sb\/[A-Za-z0-9\-_]{11}\/storyboard3_L\$L\/\$N\.jpg)\|([0-9]+\#[0-9]+\#[0-9]+\#[0-9]+\#[0-9]+\#[0-9]+\#default\#[A-Za-z\-0-9_]{27})\|([0-9]+\#[0-9]+\#[0-9]+\#[0-9]+\#[0-9]+\#[0-9]+\#M\$M\#[A-Za-z\-0-9_]{27})\|([0-9]+\#[0-9]+\#[0-9]+\#[0-9]+\#[0-9]+\#[0-9]+\#M\$M\#[A-Za-z\-0-9_]{27})\|?([0-9]+\#[0-9]+\#[0-9]+\#[0-9]+\#[0-9]+\#[0-9]+\#M\$M\#[A-Za-z\-0-9_]{27})?)/mi;
 	var qualityPattern = /([0-9]+)\#([0-9]+)\#([0-9]+)\#([0-9]+)\#([0-9]+)\#[0-9]+\#M\$M\#([A-Za-z\-0-9_]{27})/;
-	var compilePattern = /(https?\:\/\/i[0-9]+\.ytimg\.com\/sb\/[A-Za-z0-9\-_]{11}\/storyboard3_L)\$L(\/)\$N(\.jpg)/i;
+	var compilePattern = /(http)s?(\:\/\/i[0-9]+\.ytimg\.com\/sb\/[A-Za-z0-9\-_]{11}\/storyboard3_L)\$L(\/)\$N(\.jpg)/i;
 	
 	// Create constructor
 	var Spec = window.Spec = function ( specObject )
@@ -84,7 +84,7 @@
 		var count = Math.ceil( this[ qualityString ].thumbnailCount / ( this[ qualityString ].gridWidth * this[ qualityString ].gridHeight ) );
 		
 		for ( var i = 0; i < count; ++i )
-			images.push( this.url.replace( compilePattern, "$1" + this[ qualityString ].lValue + "$2M" + i + "$3?sigh=" + this[ qualityString ].sigh ) ); 
+			images.push( this.url.replace( compilePattern, "$1" + window.location.protocol == 'https:'? "":"s"  + "$2" + this[ qualityString ].lValue + "$3M" + i + "$4?sigh=" + this[ qualityString ].sigh ) ); 
 		
 		return images;
 	}

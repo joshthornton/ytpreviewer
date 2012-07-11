@@ -26,7 +26,7 @@
 
 			// Try match link "href" attribute against youtube video url pattern
 			try {
-				id = $( elem ).attr( "href" ).match( ytURLPattern )[2];
+				id = unescape( $( elem ).attr( "href" ) ).match( ytURLPattern )[ 2 ];
 				if ( !id ) return;
 			} catch ( e ) {
 				return
