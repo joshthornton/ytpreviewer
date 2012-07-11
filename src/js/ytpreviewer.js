@@ -71,7 +71,6 @@
 				{
 					try {
 						// Extract spec from source
-						var specSource = specPattern.exec( unescape( String( response ) ) )[ 1 ];
 						var spec = new Spec( String( specPattern.exec( unescape( String( response ) ) )[ 1 ] ) );
 						if ( !spec ) return;
 
