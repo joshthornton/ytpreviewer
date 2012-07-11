@@ -1,0 +1,28 @@
+{
+	"name": "YouTube Previewer",
+	"version": "0.62",
+	"manifest_version": 2,
+	"description": "Previews YouTube Video on hover using thumbnails",
+	"content_scripts": [
+		{
+			"matches": [ "*://*/*" ],
+			"exclude_matches": [ "*://*.youtube.com/*" ],
+			"css": [ "ytpreviewer.css" ],
+			"js": [ "jquery.min.js", "cache.js", "spec.js", "ytpreviewer.js" ],
+			"run_at": "document_end"
+		} ],
+	"permissions": [ "http://www.youtube.com/", "https://www.youtube.com/" ],
+	"options_page": "options.html",
+	"background": {
+		"scripts": [ "background.js" ]
+	},
+	"icons":
+		{ 
+			"16": "icon16.png",
+			"48": "icon48.png",
+			"128": "icon128.png"
+		},
+	"web_accessible_resources": [ "loading.gif" ]
+}
+
+			
