@@ -51,10 +51,14 @@
 			} else {
 				$( this ).mouseover( function ( event )
 				{
-					ytp.lookup( id, function( spec )
-					{
-						ytp.preview( elem, spec, event ); 
-					});
+					var wait = setTimeout( function ()
+					{ 
+						ytp.lookup( id, function( spec )
+						{
+							ytp.preview( elem, spec, event ); 
+						});
+					}, delay );
+					$( elem ).mouseout( function () { clearInterval( wait ); } );
 				});
 			}
 
