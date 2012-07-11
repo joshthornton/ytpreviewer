@@ -7,14 +7,14 @@
 		{
 			"matches": [ "*://*/*" ],
 			"exclude_matches": [ "*://*.youtube.com/*" ],
-			"css": [ "src/ytpreviewer.css" ],
-			"js": [ "lib/jquery.min.js", "src/cache.js", "src/spec.js", "src/ytpreviewer.js" ],
+			"css": [ "src/css/ytpreviewer.css" ],
+			"js": [ "lib/jquery.min.js", "src/js/cache.js", "src/js/spec.js", "src/js/ytpreviewer.js" ],
 			"run_at": "document_end"
 		} ],
 	"permissions": [ "http://www.youtube.com/", "https://www.youtube.com/" ],
-	"options_page": "src/options.html",
+	"options_page": "src/html/options.html",
 	"background": {
-		"scripts": [ "src/background.js" ]
+		"scripts": [ "src/js/background.js" ]
 	},
 	"icons":
 		{ 
