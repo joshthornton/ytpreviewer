@@ -10,6 +10,7 @@
 	var defaultQuality = "high";
 	var defaultScale = 2;
 	var defaultPreload = true;
+	var defaultDelay = 0;
 
 	// Regex
 	var specPattern = /((https?\:\/\/i[0-9]+\.ytimg\.com\/sb\/[A-Za-z0-9\-_]{11}\/storyboard3_L\$L\/\$N\.jpg)\|([0-9]+\#[0-9]+\#[0-9]+\#[0-9]+\#[0-9]+\#[0-9]+\#default\#[A-Za-z\-0-9_]{27})\|([0-9]+\#[0-9]+\#[0-9]+\#[0-9]+\#[0-9]+\#[0-9]+\#M\$M\#[A-Za-z\-0-9_]{27})\|([0-9]+\#[0-9]+\#[0-9]+\#[0-9]+\#[0-9]+\#[0-9]+\#M\$M\#[A-Za-z\-0-9_]{27})\|?([0-9]+\#[0-9]+\#[0-9]+\#[0-9]+\#[0-9]+\#[0-9]+\#M\$M\#[A-Za-z\-0-9_]{27})?)/mi;
@@ -28,6 +29,7 @@
 			var id;
 			var elem = this;
 			var preload = cache.get( "preload" ) || defaultPreload;
+			var delay = cache.get( "delay" ) || defaultDelay;
 
 			// Try match link "href" attribute against youtube video url pattern
 			try {
@@ -42,7 +44,8 @@
 				{
 					$( elem ).mouseover( function( event )
 					{
-						ytp.preview( elem, spec, event );
+						var wait = setTimeout( function () { ytp.preview( elem, spec, event ); }, delay );
+						$( elem ).mouseout( function () { clearInterval( wait ); } );
 					});
 				});
 			} else {
