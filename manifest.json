@@ -8,7 +8,7 @@
 			"matches": [ "*://*/*" ],
 			"exclude_matches": [ "*://*.youtube.com/*" ],
 			"css": [ "src/ytpreviewer.css" ],
-			"js": [ "src/jquery.min.js", "src/cache.js", "src/spec.js", "src/ytpreviewer.js" ],
+			"js": [ "lib/jquery.min.js", "src/cache.js", "src/spec.js", "src/ytpreviewer.js" ],
 			"run_at": "document_end"
 		} ],
 	"permissions": [ "http://www.youtube.com/", "https://www.youtube.com/" ],
