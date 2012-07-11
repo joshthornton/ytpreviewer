@@ -13,11 +13,16 @@
 
 	// Regex
 	var specPattern = /((https?\:\/\/i[0-9]+\.ytimg\.com\/sb\/[A-Za-z0-9\-_]{11}\/storyboard3_L\$L\/\$N\.jpg)\|([0-9]+\#[0-9]+\#[0-9]+\#[0-9]+\#[0-9]+\#[0-9]+\#default\#[A-Za-z\-0-9_]{27})\|([0-9]+\#[0-9]+\#[0-9]+\#[0-9]+\#[0-9]+\#[0-9]+\#M\$M\#[A-Za-z\-0-9_]{27})\|([0-9]+\#[0-9]+\#[0-9]+\#[0-9]+\#[0-9]+\#[0-9]+\#M\$M\#[A-Za-z\-0-9_]{27})\|?([0-9]+\#[0-9]+\#[0-9]+\#[0-9]+\#[0-9]+\#[0-9]+\#M\$M\#[A-Za-z\-0-9_]{27})?)/mi;
-	var ytURLPattern = /(youtube.com\/watch\?.*v=|youtu.be\/)([a-zA-Z0-9\-_]{11})/;
+	var ytURLPattern = /(youtube.com\/watch\/?\?.*v=|youtu.be\/)([a-zA-Z0-9\-_]{11})/;
 
 	// Method to add mouseover action to yt links
 	ytp.setup = function ()
 	{
+
+		ytp.listen( false );
+
+		console.log( "ytp.setup" );
+
 		$( "a" ).each( function ()
 		{
 			var id;
@@ -51,6 +56,8 @@
 			}
 
 		});
+
+		setTimeout( function () { ytp.listen( true ); }, 1000 );
 	}
 
 	// Get spec from id either from cache or via ajax
@@ -90,6 +97,9 @@
 	ytp.preview = function ( elem, spec, event )
 	{
 		
+		// Turn off listen
+		ytp.listen( false );
+
 		// Get spec details
 		var quality = cache.get( "quality" ) || defaultQuality;
 		var scale = cache.get( "scale" ) || defaultScale;
@@ -97,7 +107,7 @@
 		var s = spec[ quality ]; // Save lots of characters!
 		
 		// Add event listeners
-		$( elem ).mouseout( function () { $( ".ytpreviewer" ).remove(); } );
+		$( elem ).mouseout( function () { ytp.listen( false ); $( ".ytpreviewer" ).remove(); ytp.listen( true ); } );
 		$( elem ).mousemove( function ( event ) { ytp.move( s, scale, event ); } );
 
 		// Create DOM elements
@@ -140,6 +150,9 @@
 		$( div ).append( list );
 		$( "body" ).append( div );
 
+		// Turn on listen
+		ytp.listen( true );
+
 	}
 
 	// Make the video scroll as the mouse is moved
@@ -147,6 +160,16 @@
 	{
 		var percentage = ( event.pageX - $( event.target ).offset().left ) / $( event.target ).width();  
 		$( ".ytpreviewer" ).find( "ul" ).css( "margin-top", -Math.round( percentage * spec.thumbnailCount ) * scale * spec.imageHeight ); 
+	}
+	
+	// Compatibility with infinite scrolling pages
+	ytp.listen = function ( enable )
+	{
+		if ( enable)
+			$( "body" ).bind( "DOMSubtreeModified",  ytp.setup );
+		else
+			$( "body" ).unbind( "DOMSubtreeModified" );
+			
 	}
 
 
