@@ -7,22 +7,22 @@
 		{
 			"matches": [ "*://*/*" ],
 			"exclude_matches": [ "*://*.youtube.com/*" ],
-			"css": [ "ytpreviewer.css" ],
-			"js": [ "jquery.min.js", "cache.js", "spec.js", "ytpreviewer.js" ],
+			"css": [ "src/ytpreviewer.css" ],
+			"js": [ "src/jquery.min.js", "src/cache.js", "src/spec.js", "src/ytpreviewer.js" ],
 			"run_at": "document_end"
 		} ],
 	"permissions": [ "http://www.youtube.com/", "https://www.youtube.com/" ],
-	"options_page": "options.html",
+	"options_page": "src/options.html",
 	"background": {
-		"scripts": [ "background.js" ]
+		"scripts": [ "src/background.js" ]
 	},
 	"icons":
 		{ 
-			"16": "icon16.png",
-			"48": "icon48.png",
-			"128": "icon128.png"
+			"16": "icons/icon16.png",
+			"48": "icons/icon48.png",
+			"128": "icons/icon128.png"
 		},
-	"web_accessible_resources": [ "loading.gif" ]
+	"web_accessible_resources": [ "images/loading.gif" ]
 }
 
 			
