@@ -15,5 +15,6 @@ div.ytpreviewer {
 
 .ytpreviewer ul {
 	list-style-type: none;
+	z-index: 1002;
 }
 

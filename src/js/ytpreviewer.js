@@ -106,8 +106,8 @@
 		{
 			"width" : scale * s.imageWidth,
 			"height" : scale * s.imageHeight,
-			"top" : ( Number( elem.offsetTop ) + Number( ( event.clientY > $( window ).height() / 2 )? - scale * s.imageHeight : $( elem ).height() ) ),
-			"left" : elem.offsetLeft
+			"top" : ( $( elem ).offset().top + Number( ( event.clientY > $( window ).height() / 2 )? - scale * s.imageHeight : $( elem ).height() ) ),
+			"left" : $( elem ).offset().left
 		});
 		var list = $( "<ul></ul>" );
 		list.css(
@@ -134,7 +134,7 @@
 		}
 
 		// If link element is statically positioned, relatively position it
-		if ( $( elem ).css( "position" ) == "static" ) $( elem ).css( "position", "realative" );
+		if ( $( elem ).css( "position" ) == "static" ) $( elem ).css( "position", "relative" );
 		
 		// Add elements to page
 		$( div ).append( list );
@@ -145,7 +145,7 @@
 	// Make the video scroll as the mouse is moved
 	ytp.move = function ( spec, scale, event )
 	{
-		var percentage = ( event.pageX - event.target.offsetLeft ) / $( event.target ).width();  
+		var percentage = ( event.pageX - $( event.target ).offset().left ) / $( event.target ).width();  
 		$( ".ytpreviewer" ).find( "ul" ).css( "margin-top", -Math.round( percentage * spec.thumbnailCount ) * scale * spec.imageHeight ); 
 	}
 
