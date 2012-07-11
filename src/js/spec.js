@@ -80,17 +80,17 @@
 	Spec.prototype.getImageSet = function ( qualityString )
 	{
 		var images = [ ];
-		var qualitySpec = this.getQualitySpec( qualityString );
-		var count = Math.ceil( qualitySpec.thumbnailCount / ( qualitySpec.gridWidth * qualitySpec.gridHeight ) );
+		var s = this.getSpecForQuality( qualityString );
+		var count = Math.ceil( s.thumbnailCount / ( s.gridWidth * s.gridHeight ) );
 		
 		for ( var i = 0; i < count; ++i )
-			images.push( this.data.url.replace( compilePattern, "$1" + qualitySpec.lValue + "$2M" + i + "$3?sigh=" + qualitySpec.sigh ) ); 
+			images.push( this.data.url.replace( compilePattern, "$1" + s.lValue + "$2M" + i + "$3?sigh=" + s.sigh ) ); 
 		
 		return images;
 	}
 	
 	
-	Spec.prototype.getQualitySpec = function( qualityString )
+	Spec.prototype.getSpecForQuality = function( qualityString )
 	{
 		if ( !qualityString || qualityString == "high" )
 			return this.data.high || this.data.medium || this.data.low || {};

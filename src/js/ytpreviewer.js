@@ -95,39 +95,39 @@
 		var quality = cache.get( "quality" ) || defaultQuality;
 		var scale = cache.get( "scale" ) || defaultScale;
 		var images = spec.getImageSet( quality );
-		var qualitySpec = spec.getQualitySpec( quality );
+		var s = spec.getSpecForQuality( quality );
 		
 		// Add event listeners
 		$( elem ).mouseout( function () { $( ".ytpreviewer" ).remove(); } );
-		$( elem ).mousemove( function ( event ) { ytp.move( qualitySpec, scale, event ); } );
+		$( elem ).mousemove( function ( event ) { ytp.move( s, scale, event ); } );
 
 		// Create DOM elements
 		var div = $( "<div class='ytpreviewer'></div>" );
 		div.css(
 		{
-			"width" : scale * qualitySpec.imageWidth,
-			"height" : scale * qualitySpec.imageHeight,
-			"top" : ( Number( elem.offsetTop ) + Number( ( event.clientY > $( window ).height() / 2 )? - scale * qualitySpec.imageHeight : $( elem ).height() ) ),
+			"width" : scale * s.imageWidth,
+			"height" : scale * s.imageHeight,
+			"top" : ( Number( elem.offsetTop ) + Number( ( event.clientY > $( window ).height() / 2 )? - scale * s.imageHeight : $( elem ).height() ) ),
 			"left" : elem.offsetLeft
 		});
 		var list = $( "<ul></ul>" );
 		list.css(
 		{
-			"width" : scale * qualitySpec.imageWidth,
-			"height" : scale * qualitySpec.imageHeight * qualitySpec.thumbnailCount
+			"width" : scale * s.imageWidth,
+			"height" : scale * s.imageHeight * qualitySpec.thumbnailCount
 		});
 
-		for ( var i = 0; i < qualitySpec.thumbnailCount; ++i )
+		for ( var i = 0; i < s.thumbnailCount; ++i )
 		{
 			var frame = $( "<li></li>" );
 			frame.css(
 			{
-				"background-image" : "url( '" + images[ Math.floor( i / ( qualitySpec.gridWidth * qualitySpec.gridHeight ) ) ] +"' )",
-				"width" : scale * qualitySpec.imageWidth,
-				"height" : scale * qualitySpec.imageHeight,
-				"background-position-x" : ( i % ( qualitySpec.gridWidth * qualitySpec.gridHeight ) ) % qualitySpec.gridWidth * scale * qualitySpec.imageWidth,
-				"background-position-y" : Math.floor( ( i % ( qualitySpec.gridWidth * qualitySpec.gridHeight ) ) / qualitySpec.gridHeight )  * scale * qualitySpec.imageHeight,
-				"background-size" : ( scale * qualitySpec.imageWidth * qualitySpec.gridWidth ) + "px " + ( scale * qualitySpec.imageHeight * qualitySpec.gridHeight ) + "px"
+				"background-image" : "url( '" + images[ Math.floor( i / ( s.gridWidth * qualitySpec.gridHeight ) ) ] +"' )",
+				"width" : scale * s.imageWidth,
+				"height" : scale * s.imageHeight,
+				"background-position-x" : ( i % ( s.gridWidth * qualitySpec.gridHeight ) ) % qualitySpec.gridWidth * scale * qualitySpec.imageWidth,
+				"background-position-y" : Math.floor( ( i % ( s.gridWidth * qualitySpec.gridHeight ) ) / qualitySpec.gridHeight )  * scale * qualitySpec.imageHeight,
+				"background-size" : ( scale * s.imageWidth * qualitySpec.gridWidth ) + "px " + ( scale * qualitySpec.imageHeight * qualitySpec.gridHeight ) + "px"
 			});
 			
 			$( list ).append( frame );
