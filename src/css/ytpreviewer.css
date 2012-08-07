@@ -11,6 +11,7 @@ div.ytpreviewer {
 	background-position: center center;
 	background-image: url( "chrome-extension://pgkgkklckcefbmdbmbpafcbnlkbjfaej/images/loading.gif" );
 	background-repeat: no-repeat;
+	cursor: pointer;
 }
 
 .ytpreviewer ul {

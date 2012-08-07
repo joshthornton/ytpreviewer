@@ -11,9 +11,15 @@
 	var defaultScale = 2;
 	var defaultPreload = true;
 	var defaultDelay = 0;
+	var defaultJump = true;
+	
+	var jump = cache.get( "jump" ) || defaultJump;
+	var preload = cache.get( "preload" ) || defaultPreload;
+	var delay = cache.get( "delay" ) || defaultDelay;
 
 	// Regex
 	var specPattern = /((https?\:\/\/i[0-9]+\.ytimg\.com\/sb\/[A-Za-z0-9\-_]{11}\/storyboard3_L\$L\/\$N\.jpg)\|([0-9]+\#[0-9]+\#[0-9]+\#[0-9]+\#[0-9]+\#[0-9]+\#default\#[A-Za-z\-0-9_]{27})\|([0-9]+\#[0-9]+\#[0-9]+\#[0-9]+\#[0-9]+\#[0-9]+\#M\$M\#[A-Za-z\-0-9_]{27})\|([0-9]+\#[0-9]+\#[0-9]+\#[0-9]+\#[0-9]+\#[0-9]+\#M\$M\#[A-Za-z\-0-9_]{27})\|?([0-9]+\#[0-9]+\#[0-9]+\#[0-9]+\#[0-9]+\#[0-9]+\#M\$M\#[A-Za-z\-0-9_]{27})?)/mi;
+	var secondsPattern = /"length_seconds": ([0-9]+)/m;
 	var ytURLPattern = /(youtube.com\/watch\/?\?.*v=|youtu.be\/)([a-zA-Z0-9\-_]{11})/;
 
 	// Method to add mouseover action to yt links
@@ -22,14 +28,10 @@
 
 		ytp.listen( false );
 
-		console.log( "ytp.setup" );
-
 		$( "a" ).each( function ()
 		{
 			var id;
 			var elem = this;
-			var preload = cache.get( "preload" ) || defaultPreload;
-			var delay = cache.get( "delay" ) || defaultDelay;
 
 			// Try match link "href" attribute against youtube video url pattern
 			try {
@@ -44,7 +46,7 @@
 				{
 					$( elem ).mouseover( function( event )
 					{
-						var wait = setTimeout( function () { ytp.preview( elem, spec, event ); }, delay );
+						var wait = setTimeout( function () { if ( $( elem ).find( ".ytpreviewer" ).length ==  0 ) { ytp.preview( elem, spec, event ); } }, delay );
 						$( elem ).mouseout( function () { clearInterval( wait ); } );
 					});
 				});
@@ -85,7 +87,7 @@
 				{
 					try {
 						// Extract spec from source
-						var spec = new Spec( String( specPattern.exec( unescape( String( response ) ) )[ 1 ] ) );
+						var spec = new Spec( String( specPattern.exec( unescape( String( response ) ) )[ 1 ] ), Number( secondsPattern.exec( unescape( String( response ) ) )[ 1 ] ) );
 						if ( !spec ) return;
 
 						// Cache spec
@@ -114,7 +116,7 @@
 		var s = spec[ quality ]; // Save lots of characters!
 		
 		// Add event listeners
-		$( elem ).mouseout( function () { ytp.listen( false ); $( ".ytpreviewer" ).remove(); ytp.listen( true ); } );
+		$( elem ).mouseleave( function () { ytp.listen( false ); $( ".ytpreviewer" ).remove(); ytp.listen( true ); } );
 		$( elem ).mousemove( function ( event ) { ytp.move( s, scale, event ); } );
 
 		// Create DOM elements
@@ -123,8 +125,8 @@
 		{
 			"width" : scale * s.imageWidth,
 			"height" : scale * s.imageHeight,
-			"top" : ( $( elem ).offset().top + Number( ( event.clientY > $( window ).height() / 2 )? - scale * s.imageHeight : $( elem ).height() ) ),
-			"left" : $( elem ).offset().left
+			"top" : $( elem ).height(), /*( $( elem ).offset().top + Number( ( event.clientY > $( window ).height() / 2 )? - scale * s.imageHeight : $( elem ).height() ) ),
+			"left" : $( elem ).offset().left*/
 		});
 		var list = $( "<ul></ul>" );
 		list.css(
@@ -152,10 +154,22 @@
 
 		// If link element is statically positioned, relatively position it
 		if ( $( elem ).css( "position" ) == "static" ) $( elem ).css( "position", "relative" );
+		$( elem ).parents().css( "overflow", "visible" );
+
+		// Add click action to video section
+		if ( jump ) {
+			$( elem ).click( function ( event )
+			{	
+				var percentage = ( event.pageX - $( event.target ).offset().left ) / $( event.target ).width();  
+				window.location = ytBaseURL + spec.id + "&t=" + Math.round( spec.seconds * percentage ) + "s";
+				return false; // Prevent default
+			});
+		}
 		
 		// Add elements to page
 		$( div ).append( list );
-		$( "body" ).append( div );
+		//$( "body" ).append( div );
+		$( elem ).append( div );
 
 		// Turn on listen
 		ytp.listen( true );
