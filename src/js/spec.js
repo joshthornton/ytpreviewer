@@ -3,12 +3,12 @@
 {
 	
 	// Regex
-	var specPattern = /((https?\:\/\/i[0-9]+\.ytimg\.com\/sb\/[A-Za-z0-9\-_]{11}\/storyboard3_L\$L\/\$N\.jpg)\|([0-9]+\#[0-9]+\#[0-9]+\#[0-9]+\#[0-9]+\#[0-9]+\#default\#[A-Za-z\-0-9_]{27})\|([0-9]+\#[0-9]+\#[0-9]+\#[0-9]+\#[0-9]+\#[0-9]+\#M\$M\#[A-Za-z\-0-9_]{27})\|([0-9]+\#[0-9]+\#[0-9]+\#[0-9]+\#[0-9]+\#[0-9]+\#M\$M\#[A-Za-z\-0-9_]{27})\|?([0-9]+\#[0-9]+\#[0-9]+\#[0-9]+\#[0-9]+\#[0-9]+\#M\$M\#[A-Za-z\-0-9_]{27})?)/mi;
+	var specPattern = /((https?\:\/\/i[0-9]+\.ytimg\.com\/sb\/([A-Za-z0-9\-_]{11})\/storyboard3_L\$L\/\$N\.jpg)\|([0-9]+\#[0-9]+\#[0-9]+\#[0-9]+\#[0-9]+\#[0-9]+\#default\#[A-Za-z\-0-9_]{27})\|([0-9]+\#[0-9]+\#[0-9]+\#[0-9]+\#[0-9]+\#[0-9]+\#M\$M\#[A-Za-z\-0-9_]{27})\|([0-9]+\#[0-9]+\#[0-9]+\#[0-9]+\#[0-9]+\#[0-9]+\#M\$M\#[A-Za-z\-0-9_]{27})\|?([0-9]+\#[0-9]+\#[0-9]+\#[0-9]+\#[0-9]+\#[0-9]+\#M\$M\#[A-Za-z\-0-9_]{27})?)/mi;
 	var qualityPattern = /([0-9]+)\#([0-9]+)\#([0-9]+)\#([0-9]+)\#([0-9]+)\#[0-9]+\#M\$M\#([A-Za-z\-0-9_]{27})/;
 	var compilePattern = /(http)s?(\:\/\/i[0-9]+\.ytimg\.com\/sb\/[A-Za-z0-9\-_]{11}\/storyboard3_L)\$L(\/)\$N(\.jpg)/i;
 	
 	// Create constructor
-	var Spec = window.Spec = function ( specObject )
+	var Spec = window.Spec = function ( specObject, seconds )
 	{
 		
 		// Handle empty spec string
@@ -28,9 +28,15 @@
 		if ( matches[ 2 ] )
 			this.url = matches[ 2 ];
 
+		// Get ID
+		if ( matches[ 3 ] )
+			this.id = matches[ 3 ];
+		
+		this.seconds = seconds;
+
 		// Get low quality
-		if ( matches[ 4 ] ) {
-			var low = qualityPattern.exec( matches[ 4 ] );
+		if ( matches[ 5 ] ) {
+			var low = qualityPattern.exec( matches[ 5 ] );
 			this.low = {
 				imageWidth : low[ 1 ],
 				imageHeight : low[ 2 ],
@@ -43,8 +49,8 @@
 		}
 
 		// Get medium quality
-		if ( matches[ 5 ] ) {
-			var medium = qualityPattern.exec( matches[ 5 ] );
+		if ( matches[ 6 ] ) {
+			var medium = qualityPattern.exec( matches[ 6 ] );
 			this.medium = {
 				imageWidth : medium[ 1 ],
 				imageHeight : medium[ 2 ],
@@ -59,8 +65,8 @@
 		}
 
 		// Get high quality
-		if ( matches[ 6 ] ) {
-			var high = qualityPattern.exec( matches[ 6 ] );
+		if ( matches[ 7 ] ) {
+			var high = qualityPattern.exec( matches[ 7 ] );
 			this.high = {
 				imageWidth : high[ 1 ],
 				imageHeight : high[ 2 ],
