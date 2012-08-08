@@ -54,7 +54,15 @@
 		});
 	}
 
+	cache.clear = function()
+	{
+		port.postMessage(
+		{
+			method: "clearCache"
+		});
 
+		cache.data = {};
+	}
 
 })( window );
 

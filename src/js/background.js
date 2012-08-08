@@ -25,6 +25,9 @@
 				// Save locally
 				localStorage[ request.key ] = request.value;
 
+			} else if ( request.method == "clearCache" )
+			{
+				localStorage.clear();
 			}
 		});
 
