@@ -1,53 +1,127 @@
+(function ( window )
+{
+
+	// Create namespace
+	var O = window.Options = this;
+
+	O.init = function( params )
+	{
+		
+		// Construct form
+		var form = $( "<form></form>" );
+		
+		// Make table
+		var table = $( "<table></table>" );
+
+		// Add rows
+		$( params.form ).each( function()
+		{
+
+			var option = this;
+
+			var row = $( "<tr></tr>" );
+			var name = $( "<td>" + option.name + ": </td>" );
+			var value = $( "<td></td>" );
+			var tooltip = $( "<td><div class='tooltip'><span>" + option.tooltip  + "</span></div></td>" );
+
+			if ( option.type == "select" )
+			{
+				var select = $( "<select id='" + option.key  + "'></select" );
+
+				$( option.options ).each( function ()
+				{
+					$( select ).append( $( "<option value='" + this.value + "'>" + this.name + "</option>" ) );	
+				});
+
+				$( value ).append( select );
+
+			} else {
+
+				var input = $( "<input></input>" );
+				$( input ).attr(
+				{
+					"id" : option.key,
+					"type" : option.type == "boolean" ? "checkbox" : "text",
+					"value" : option.value
+				});
+				if ( option.type = "boolean" )
+					input.attr( "checked", option.value );
+				else
+					input.html( option.value );
+
+				$( value ).append( input );
+		
+			}
+
+			$( row ).append( name, value, tooltip );
+
+			$( table ).append( row );
+
+		});
+
+		// Add save button
+		$( table ).append( $( "<tr><td></td><td><input id='save' type='submit'>Save</input></td><td></td></tr>" ) );
+
+		// Add save action
+		$( table ).find( "#save" ).click( function ()
+		{
+			
+			var values = {}
+
+			// Get each of the values
+			$( params.form ).each( function()
+			{
+				var option = this;
+
+				if ( option.type == "boolean" )
+					values[ option.key ] = $( "#" + option.key ).prop( "checked" ) ? true : false;
+				else
+					values[ option.key ] = $( "#" + option.key ).val();
+
+			});
+
+			// Callback
+			params.callback( values );
+
+		});
+
+		// Add table to form
+		$( form ).append( table );
+
+		// Add form to div
+		$( params.div ).html( form );
+
+		console.log( form );
+
+	};
+	
+
+})( window );
+
+
 // Load setting from cache
 cache.load( function ()
 {
 
-	// Run on document load
-	$( document ).ready( function ()
-	{
-
-		// Get details from cache 
-		var quality = cache.get( "quality" ) || "high";
-		var scale = cache.get( "scale" ) || "2";
-		var preload = cache.get( "preload" ) || true; 
-		var delay = cache.get( "delay" ) || 0; 
-	
-		// Update form 
-		$( "#quality" ).val( quality );
-		$( "#scale" ).prop( "checked", scale == "1" ? "" : "checked" );
-		$( "#preload" ).prop( "checked", preload?  "checked" : "" );
-		$( "#delay" ).val( delay );
-		
-		// Set callback
-		$( "#save" ).click( function ()
+	var options = {
+		div : "body",
+		callback: function( values )
 		{
-		
-			// Get values
-			var quality = $( "#quality" ).val();
-			var scale = $( "#scale" ).prop( "checked" ) ? "2" : "1";
-			var preload = $( "#preload" ).prop( "checked" ) ? true : false;
-			var delay = $( "#delay" ).val();
-		
-			// Save to cache 
-			cache.set( "quality", quality );
-			cache.set( "scale", scale );
-			cache.set( "preload", preload );
-			cache.set( "delay", delay );
-		
-			// Show options saved
-			$( "#status" ).html( "Options Saved." );
-			setTimeout( function ()
+			$( values ).each( function ( opt )
 			{
-				$( "#status" ).html( "" );
-			}, 750 );
-		});
+				cache.set( opt.key, opt.value );
+			});
+		},
+		form: [
+			{ key: "jump", value: cache.get( "jump" ), type : "boolean", name: "Jump", tooltip: "Link to the part of the video matching the current thumbnail" },
+			{ key: "hover", value: cache.get( "hover" ), type: "boolean", name: "Hover", tooltip: "Keep video preview visible whilst hovering over thumbnails" },
+			{ key: "preload", value: cache.get( "preload" ), type: "boolean", name: "Prefetch Video Information", tooltip: "Preload video information for faster loading. May waste bandwidth by prefetching video specs for never previewed videos" },
+			{ key: "delay", value: cache.get( "delay" ), type: "int", name: "Preview delay (ms)", tooltip: "The delay between hovering over a link and the preview being shown" },
+			{ key: "quality", value: cache.get( "quality" ), type: "select", options: [ { name: "low", value: "low" }, { name: "medium", value: "medium" }, { name: "high", value: "high" } ], name: "Thumbnail Quality", tooltip: "YouTube provides three quality levels for thumbnail previews. Higher quality == more bandwidth" },
+			{ key: "scale", value: cache.get( "scale" ), type: "boolean", name: "Pixel-Double Preview", tooltip: "Show the preview at double the actual size" }
+		]
+	};
 
-		// Set clear
-		$( "#clear" ).click( function ()
-		{
-			cache.clear();
-		});
-	
-	});
+	Options.init( options );
 
 });

@@ -13,13 +13,13 @@ cache.load( function ()
 		var ytBaseURL = "http://www.youtube.com/watch?v=";
 	
 		// This can't be done before cache initiliazation!
-		var jump = cache.get( "jump" ) || true;
+		var jump = cache.get( "jump" ) || "true";
 		var hover = cache.get( "hover" ) || true;
 		var preload = cache.get( "preload" ) || true;
 		var delay = cache.get( "delay" ) || 250;
 		var quality = cache.get( "quality" ) || "high";
 		var scale = cache.get( "scale" ) || 2;
-	
+		
 		// Regex
 		var specPattern = /((https?\:\/\/i[0-9]+\.ytimg\.com\/sb\/[A-Za-z0-9\-_]{11}\/storyboard3_L\$L\/\$N\.jpg)\|([0-9]+\#[0-9]+\#[0-9]+\#[0-9]+\#[0-9]+\#[0-9]+\#default\#[A-Za-z\-0-9_]{27})\|([0-9]+\#[0-9]+\#[0-9]+\#[0-9]+\#[0-9]+\#[0-9]+\#M\$M\#[A-Za-z\-0-9_]{27})\|([0-9]+\#[0-9]+\#[0-9]+\#[0-9]+\#[0-9]+\#[0-9]+\#M\$M\#[A-Za-z\-0-9_]{27})\|?([0-9]+\#[0-9]+\#[0-9]+\#[0-9]+\#[0-9]+\#[0-9]+\#M\$M\#[A-Za-z\-0-9_]{27})?)/mi;
 		var secondsPattern = /"length_seconds": ([0-9]+)/m;
