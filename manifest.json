@@ -14,8 +14,7 @@
 	"permissions": [ "http://www.youtube.com/", "https://www.youtube.com/" ],
 	"options_page": "src/html/options.html",
 	"background": {
-		"page" : "src/html/background.html"
-/*		"scripts": [ "src/js/background.js" ] */
+		"scripts": [ "src/js/background.js" ]
 	},
 	"icons":
 		{ 

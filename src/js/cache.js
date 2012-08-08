@@ -1,60 +1,60 @@
-// Namespace
-var cache = {};
-
-// Object to store data
-cache.data = {};
-
-// Load from permanent background storage
-cache.load = function ( callback )
+(function( window )
 {
+	
+	// Namespace
+	var cache = window.cache = this;
 
-	// Send request
-	chrome.extension.sendRequest(
+	// Object to store key / value pairs
+	cache.data = {};
+
+	// Setup port
+	var port = chrome.extension.connect( { name : "ytpreviewer" } );
+
+	// Load method
+	cache.load = function( callback )
 	{
-		method: "loadCache"
+	
+		port.postMessage( { method: "loadCache" } );
+		port.onMessage.addListener( function ( response )
+		{
+	
+			if ( response )
+			{
+				// Store each key / value pair
+				for ( var key in response )
+					cache.data[ key ] = response[ key ];
 
-	}, function ( response )
+			}
+			
+			// call callback
+			if ( callback ) callback();
+		
+		});
+	}
+
+	// Get method
+	cache.get = function ( key )
 	{
+		return cache.data[ key ];
+	}
 
-		// Store each key / value pair
-		for ( var key in response )
-			cache.data[ key ] = response[ key ];
-
-
-		// call callback
-		if ( callback ) callback();
-	});
-
-}
-
-cache.clear = function ()
-{
-	cache.data = {}
-
-	// clear remotely
-	chrome.extension.sendRequest(
+	// Set method
+	cache.set = function ( key, value )
 	{
-		method : "clearCache",
-	});
-}
+		
+		// Save locally
+		cache.data[ key ] = value;
 
-cache.get = function ( key )
-{
-	return cache.data[ key ];
-}
+		// Save remotely
+		port.postMessage(
+		{
+			method : "saveCache",
+			key :	key,
+			value : value
+		});
+	}
 
-cache.set = function ( key, value )
-{
 
-	// Save locally
-	cache.data[ key ] = value;
 
-	// Save remotely
-	chrome.extension.sendRequest(
-	{
-		method : "saveCache",
-		key : key,
-		value : value
-	});
+})( window );
 
-}

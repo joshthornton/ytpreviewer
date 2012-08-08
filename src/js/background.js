@@ -1,26 +1,34 @@
-chrome.extension.onRequest.addListener( function(request, sender, sendResponse)
+(function( window )
 {
-	if ( request.method == "loadCache" ) {
 
-		var ls = {};
+	// Add listener
+	chrome.extension.onConnect.addListener( function ( port )
+	{
+		
+		console.log( "onConnect: " + JSON.stringify( port ) );
 
-		for ( var i = 0; i < localStorage.length; i++ )
+		// Register a unique listener
+		port.onMessage.addListener( function( request )
 		{
-			ls[ localStorage.key( i ) ] = localStorage.getItem( localStorage.key ( i ) );
-		}
+			if ( request.method == "loadCache" )
+			{
 
-		sendResponse( ls );
-	} else if ( request.method == "saveCache" ) {
+				var ls = {};
 
-		localStorage[ request.key ] = request.value;
+				for ( var i = 0; i < localStorage.length; i++ )
+					ls[ localStorage.key( i ) ] = localStorage.getItem( localStorage.key( i ) );
 
-    	sendResponse( {} );
-	} else if ( request.method == "clearCache" ) {
-		localStorage.clear();	
+				port.postMessage( ls );
 
-		sendResponse( {} );
+			} else if ( request.method == "saveCache" )
+			{
+				// Save locally
+				localStorage[ request.key ] = request.value;
 
-    } else {
-    	sendResponse( {} ); // snub them.
-    }
-});
+			}
+		});
+
+	});
+
+})( window );
+
