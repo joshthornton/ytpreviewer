@@ -12,16 +12,27 @@ cache.load( function ()
 		// Scoped Variables
 		var ytBaseURL = "http://www.youtube.com/watch?v=";
 
-		// Special instruction to clear cache after update
-		if ( cache.get( "scale") == 1 || cache.get( "scale" ) == 2 )
-			cache.clear();
-	
-		// This can't be done before cache initiliazation!
+		// Default options - there has to be a more elegant way to do this
+		if ( cache.get( "jump" ) != "true" && cache.get( "jump" ) != "false" )
+			cache.set( "jump", "true" );
+		if ( cache.get( "hover" ) != "true" && cache.get( "hover" ) != "false" )
+			cache.set( "hover", "true" );
+		if ( cache.get( "preload" ) != "true" && cache.get( "preload" ) != "false" )
+			cache.set( "preload", "true" );
+		if ( cache.get( "scale" ) != "true" && cache.get( "scale" ) != "false" )
+			cache.set( "scale", "true" );
+		if ( isNaN( parseInt( cache.get( "delay" ) ) ) )
+			cache.set( "delay", "250" );
+		if ( cache.get( "quality" ) != "high" && cache.get( "quality" ) != "medium" && cache.get( "quality" ) != "low" ) 
+			cache.set( "quality", "high" );
+
+
+		// Getting user options
 		var jump = cache.get( "jump" ) == "true";
 		var hover = cache.get( "hover" ) == "true";
 		var preload = cache.get( "preload" ) == "true";
-		var delay = cache.get( "delay" ) || 250;
-		var quality = cache.get( "quality" ) || "high";
+		var delay = Number( cache.get( "delay" ) );
+		var quality = cache.get( "quality" );
 		var scale = cache.get( "scale" ) == "true"? 2 : 1;
 		
 		// Regex
