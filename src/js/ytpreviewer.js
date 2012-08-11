@@ -14,9 +14,9 @@ cache.load( function ()
 
 		// Default options - there has to be a more elegant way to do this
 		if ( cache.get( "jump" ) != "true" && cache.get( "jump" ) != "false" )
-			cache.set( "jump", "true" );
+			cache.set( "jump", "false" );
 		if ( cache.get( "hover" ) != "true" && cache.get( "hover" ) != "false" )
-			cache.set( "hover", "true" );
+			cache.set( "hover", "false" );
 		if ( cache.get( "preload" ) != "true" && cache.get( "preload" ) != "false" )
 			cache.set( "preload", "true" );
 		if ( cache.get( "scale" ) != "true" && cache.get( "scale" ) != "false" )
