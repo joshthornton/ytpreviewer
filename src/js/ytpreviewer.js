@@ -164,7 +164,9 @@ cache.load( function ()
 					"height" : scale * s.imageHeight,
 					"background-position-x" : ( i % ( s.gridWidth * s.gridHeight ) ) % s.gridWidth * scale * s.imageWidth,
 					"background-position-y" : Math.floor( ( i % ( s.gridWidth * s.gridHeight ) ) / s.gridHeight )  * scale * s.imageHeight,
-					"background-size" : ( scale * s.imageWidth * s.gridWidth ) + "px " + ( scale * s.imageHeight * s.gridHeight ) + "px"
+					"background-size" : ( scale * s.imageWidth * s.gridWidth ) + "px " + ( scale * s.imageHeight * s.gridHeight ) + "px",
+					"margin" : "0px",
+					"padding" : "0px"
 				});
 				
 				$( list ).append( frame );
