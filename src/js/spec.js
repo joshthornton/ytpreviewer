@@ -45,8 +45,6 @@
 				};
 
 				this.thumbnail = true;
-				
-				console.log( "spec : " + JSON.stringify( this ) );
 
 				return this;
 			} catch ( e ) {
@@ -109,8 +107,6 @@
 		}
 
 		this.thumbnail = false;
-
-		console.log( "spec : " + JSON.stringify( this ) );
 
 		return this;
 	}

@@ -92,8 +92,10 @@ cache.load( function ()
 			// Check cache
 			var spec = cache.get( id ); 
 			if ( spec ) { 
-				console.log( "cached" );
-				if ( spec != "unavailable" ) callback( new Spec( spec ) );
+				if ( spec != "unavailable" )
+					callback( new Spec( spec ) );
+				else
+					cache.clear();
 			} else {
 				
 				// Ajax lookup
@@ -109,12 +111,10 @@ cache.load( function ()
 							if ( !spec ) return;
 	
 							// Cache spec
-							//cache.set( id, JSON.stringify( spec ) );
+							cache.set( id, JSON.stringify( spec ) );
 	
 							callback( spec );
-						} catch ( e ) {
-							//cache.set( id, "unavailable" );
-						}
+						} catch ( e ) {}
 					}
 				});
 			}
