@@ -4,25 +4,55 @@
 	
 	// Regex
 	var specPattern = /((https?\:\/\/i[0-9]+\.ytimg\.com\/sb\/([A-Za-z0-9\-_]{11})\/storyboard3_L\$L\/\$N\.jpg)\|([0-9]+\#[0-9]+\#[0-9]+\#[0-9]+\#[0-9]+\#[0-9]+\#default\#[A-Za-z\-0-9_]{27})\|([0-9]+\#[0-9]+\#[0-9]+\#[0-9]+\#[0-9]+\#[0-9]+\#M\$M\#[A-Za-z\-0-9_]{27})\|([0-9]+\#[0-9]+\#[0-9]+\#[0-9]+\#[0-9]+\#[0-9]+\#M\$M\#[A-Za-z\-0-9_]{27})\|?([0-9]+\#[0-9]+\#[0-9]+\#[0-9]+\#[0-9]+\#[0-9]+\#M\$M\#[A-Za-z\-0-9_]{27})?)/mi;
+	var secondsPattern = /"length_seconds": ([0-9]+)/m;
+	var thumbnailPattern = /(https?\:\/\/i[0-9]+\.ytimg\.com\/vi\/([A-Za-z0-9\-_]{11})\/)/m;
 	var qualityPattern = /([0-9]+)\#([0-9]+)\#([0-9]+)\#([0-9]+)\#([0-9]+)\#[0-9]+\#M\$M\#([A-Za-z\-0-9_]{27})/;
 	var compilePattern = /(http)s?(\:\/\/i[0-9]+\.ytimg\.com\/sb\/[A-Za-z0-9\-_]{11}\/storyboard3_L)\$L(\/)\$N(\.jpg)/i;
 	
 	// Create constructor
-	var Spec = window.Spec = function ( specObject, seconds )
+	var Spec = window.Spec = function ( param )
 	{
-		
-		// Handle empty spec string
-		if ( typeof( specObject ) != "string" ) 
-			return;
 		
 		// Cached object
 		try {
-			$.extend( this, JSON.parse( specObject ) );
+			$.extend( this, JSON.parse( param ) );
 			return this;
 		} catch ( e ) {}
+
+		// Load seconds
+		var secondsMatch = secondsPattern.exec( param );
+		if ( secondsMatch[ 1 ] )
+			this.seconds = parseInt( secondsMatch[ 1 ] );
+		else
+			this.seconds = 0;
 		
 		// Match sections of spec string
-		var matches = specPattern.exec( specObject );
+		var matches = specPattern.exec( param );
+
+		// Fallback to thumbnail if match fails
+		if ( !matches )
+		{
+			var thumbMatch = thumbnailPattern.exec( param );
+			try {
+				this.url = thumbMatch[ 1 ];
+				this.id = thumbMatch[ 2 ];
+				this.high = this.medium = this.low = {
+					imageWidth : 120,
+					imageHeight : 90,
+					thumbnailCount : 3,
+					gridWidth : 1,
+					gridHeight : 1
+				};
+
+				this.thumbnail = true;
+				
+				console.log( "spec : " + JSON.stringify( this ) );
+
+				return this;
+			} catch ( e ) {
+				return null;
+			}
+		}
 
 		// Get URL
 		if ( matches[ 2 ] )
@@ -31,8 +61,6 @@
 		// Get ID
 		if ( matches[ 3 ] )
 			this.id = matches[ 3 ];
-		
-		this.seconds = seconds;
 
 		// Get low quality
 		if ( matches[ 5 ] ) {
@@ -65,7 +93,7 @@
 		}
 
 		// Get high quality
-		if ( matches[ 7 ] ) {
+		if ( matches.length[ 7 ] ) {
 			var high = qualityPattern.exec( matches[ 7 ] );
 			this.high = {
 				imageWidth : high[ 1 ],
@@ -80,11 +108,15 @@
 			this.high = this.medium
 		}
 
+		this.thumbnail = false;
+
+		console.log( "spec : " + JSON.stringify( this ) );
+
 		return this;
 	}
-	
-	// Compiles an array of images from spec
-	Spec.prototype.getImageSet = function ( qualityString )
+
+	// image set function for preview images
+	Spec.prototype.previewImageSet = function ( qualityString ) 
 	{
 		var images = [ ];
 		var count = Math.ceil( this[ qualityString ].thumbnailCount / ( this[ qualityString ].gridWidth * this[ qualityString ].gridHeight ) );
@@ -95,5 +127,14 @@
 		return images;
 	}
 
+	// image set function for thumbnaiil images
+	Spec.prototype.thumbnailImageSet = function()
+	{
+		var images = [];
+		for ( var i = 1; i <= 3; ++i )
+			images.push( this.url + i + ".jpg" );
+		return images;
+	}
+	
 } )( window );
 

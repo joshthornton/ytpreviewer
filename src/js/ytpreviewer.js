@@ -26,7 +26,6 @@ cache.load( function ()
 		if ( cache.get( "quality" ) != "high" && cache.get( "quality" ) != "medium" && cache.get( "quality" ) != "low" ) 
 			cache.set( "quality", "high" );
 
-
 		// Getting user options
 		var jump = cache.get( "jump" ) == "true";
 		var hover = cache.get( "hover" ) == "true";
@@ -93,6 +92,7 @@ cache.load( function ()
 			// Check cache
 			var spec = cache.get( id ); 
 			if ( spec ) { 
+				console.log( "cached" );
 				if ( spec != "unavailable" ) callback( new Spec( spec ) );
 			} else {
 				
@@ -105,15 +105,15 @@ cache.load( function ()
 					{
 						try {
 							// Extract spec from source
-							var spec = new Spec( String( specPattern.exec( unescape( String( response ) ) )[ 1 ] ), Number( secondsPattern.exec( unescape( String( response ) ) )[ 1 ] ) );
+							var spec = new Spec( unescape( String( response ) ) );
 							if ( !spec ) return;
 	
 							// Cache spec
-							cache.set( id, JSON.stringify( spec ) );
+							//cache.set( id, JSON.stringify( spec ) );
 	
 							callback( spec );
 						} catch ( e ) {
-							cache.set( id, "unavailable" );
+							//cache.set( id, "unavailable" );
 						}
 					}
 				});
@@ -126,9 +126,9 @@ cache.load( function ()
 			
 			// Turn off listen
 			ytp.listen( false );
-	
+
 			// Get spec details
-			var images = spec.getImageSet( quality );
+			var images = spec.thumbnail ? spec.thumbnailImageSet() : spec.previewImageSet( quality );
 			var s = spec[ quality ]; // Save lots of characters!
 			
 			// Add event listeners
@@ -200,7 +200,7 @@ cache.load( function ()
 		ytp.move = function ( spec, scale, event )
 		{
 			var percentage = ( event.pageX - $( event.target ).offset().left ) / $( event.target ).width();  
-			$( ".ytpreviewer" ).find( "ul" ).css( "margin-top", -Math.round( percentage * spec.thumbnailCount ) * scale * spec.imageHeight ); 
+			$( ".ytpreviewer" ).find( "ul" ).css( "margin-top", -Math.floor( percentage * spec.thumbnailCount ) * scale * spec.imageHeight ); 
 		}
 		
 		// Compatibility with infinite scrolling pages
