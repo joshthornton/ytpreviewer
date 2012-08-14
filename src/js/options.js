@@ -41,11 +41,14 @@
 				$( input ).attr(
 				{
 					"id" : option.key,
-					"type" : option.type == "boolean" ? "checkbox" : "text",
+					"type" : option.type == "boolean" ? "checkbox" : 
+							 option.type == "button" ? "button" : "text",
 					"value" : option.value
 				});
 				if ( option.type == "boolean" )
 					input.attr( "checked", option.value );
+				else if ( option.type == "button" )
+					$( input ).click( option.action );
 				else
 					input.html( option.value );
 
@@ -73,7 +76,7 @@
 			{
 				if ( this.type == "boolean")
 					values.push( { key : this.key, value : $( "#" + this.key ).attr( "checked" ) != undefined? "true" : "false" } );
-				else
+				else if ( this.type != "button" )
 					values.push( { key : this.key, value : $( "#" + this.key ).val() } );
 			});
 
@@ -105,7 +108,7 @@ cache.load( function ()
 {
 
 	var options = {
-		div : "body",
+		div : "#options",
 		callback: function( values )
 		{
 			$( values ).each( function ()
@@ -119,7 +122,8 @@ cache.load( function ()
 			{ key: "preload", value: cache.get( "preload" ) == "true", type: "boolean", name: "Prefetch Video Information", tooltip: "Preload video information for faster loading. May waste bandwidth by prefetching video specs for never previewed videos" },
 			{ key: "delay", value: cache.get( "delay" ), type: "int", name: "Preview delay (ms)", tooltip: "The delay between hovering over a link and the preview being shown" },
 			{ key: "quality", value: cache.get( "quality" ), type: "select", options: [ { name: "low", value: "low" }, { name: "medium", value: "medium" }, { name: "high", value: "high" } ], name: "Thumbnail Quality", tooltip: "YouTube provides three quality levels for thumbnail previews. Higher quality == more bandwidth" },
-			{ key: "scale", value: cache.get( "scale" ) == "true", type: "boolean", name: "Pixel-Double Preview", tooltip: "Show the preview at double the actual size" }
+			{ key: "scale", value: cache.get( "scale" ) == "true", type: "boolean", name: "Pixel-Double Preview", tooltip: "Show the preview at double the actual size" },
+			{ key: "clear", value: "Clear Cache", type: "button", name: "Clear Cache", tooltip: "If you are experiencing problems, try clearing the cache.", action: function() { cache.clear() } }
 		]
 	};
 
