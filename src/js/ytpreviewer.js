@@ -216,5 +216,6 @@ cache.load( function ()
 	
 	} ) ( window );
 
-	$( document ).ready( ytpreviewer.setup );
+	/*$( document ).ready( ytpreviewer.setup ); */
+	ytpreviewer.setup(); // Don't wait for every resource to load
 });
