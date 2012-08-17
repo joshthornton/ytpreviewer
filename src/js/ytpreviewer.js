@@ -175,7 +175,7 @@ cache.load( function ()
 	
 			// If link element is statically positioned, relatively position it
 			if ( $( elem ).css( "position" ) == "static" ) $( elem ).css( "position", "relative" );
-			$( elem ).parents().css( "overflow", "visible" );
+			$( elem ).parents().css( "overflow", "visible !important" );
 	
 			// Add click action to video section
 			if ( jump ) {
