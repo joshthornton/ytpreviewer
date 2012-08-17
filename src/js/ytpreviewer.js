@@ -44,6 +44,10 @@ cache.load( function ()
 		{
 	
 			ytp.listen( false );
+
+			// Add new css class to DOM
+			$( "html > head" ).append( $( "<style> .yt-overflow { overflow: visible !important; } </style>" ) );
+
 	
 			$( "a" ).each( function ()
 			{
@@ -175,7 +179,7 @@ cache.load( function ()
 	
 			// If link element is statically positioned, relatively position it
 			if ( $( elem ).css( "position" ) == "static" ) $( elem ).css( "position", "relative" );
-			$( elem ).parents().css( "overflow", "visible !important" );
+			$( elem ).parents().addClass( "yt-overflow" );
 	
 			// Add click action to video section
 			if ( jump ) {
