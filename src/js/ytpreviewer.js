@@ -136,8 +136,11 @@ cache.load( function ()
 			var s = spec[ quality ]; // Save lots of characters!
 			
 			// Add event listeners
-			$( elem ).bind( hover? "mouseleave":"mouseout", function () { ytp.listen( false ); $( ".ytpreviewer" ).remove(); ytp.listen( true ); } );
+			$( elem ).bind( hover? "mouseleave":"mouseout", function () { ytp.listen( false ); $( ".ytpreviewer" ).remove(); $( elem ).parents().removeClass( "yt-overflow" ); ytp.listen( true ); } );
 			$( elem ).mousemove( function ( event ) { ytp.move( s, scale, event ); } );
+			
+			// Ensure parents will not hide preview
+			$( elem ).parents().addClass( "yt-overflow" );
 	
 			// Create DOM elements
 			var div = $( "<div class='ytpreviewer'></div>" );
@@ -179,7 +182,6 @@ cache.load( function ()
 	
 			// If link element is statically positioned, relatively position it
 			if ( $( elem ).css( "position" ) == "static" ) $( elem ).css( "position", "relative" );
-			$( elem ).parents().addClass( "yt-overflow" );
 	
 			// Add click action to video section
 			if ( jump ) {

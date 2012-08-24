@@ -5,8 +5,6 @@
 	chrome.extension.onConnect.addListener( function ( port )
 	{
 		
-		console.log( "onConnect: " + JSON.stringify( port ) );
-
 		// Register a unique listener
 		port.onMessage.addListener( function( request )
 		{

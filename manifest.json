@@ -1,6 +1,6 @@
 {
 	"name": "YouTube Previewer",
-	"version": "0.88",
+	"version": "0.89",
 	"manifest_version": 2,
 	"description": "Previews YouTube Video on hover using thumbnails",
 	"content_scripts": [
